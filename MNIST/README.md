@@ -16,7 +16,7 @@ The testing code is automatically designed to pick the models from the folder.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5: worst  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6: vanilla  
   > `batch_size` - Batch Size for Test Set -`default = 100`  
-  > `attack` - Foolbox = 0; Custom PGD = 1; Saving PGD = 2;  - `default = 1`  
+  > `attack` - Foolbox = 0; Custom PGD = 1, Min PGD = 2, Fast DDN = 3;  - `default = 1`  
   > `restarts` 	- Number of Random Restarts - `default = 10`  
   > `path` - To override default model fetching - `default = 12`   
   > `subset` - Subset for Foolbox attacks - `default = -1`   
@@ -36,7 +36,7 @@ The testing code is automatically designed to pick the models from the folder.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6: vanilla  
   > `batch_size` - Batch Size for Train Set -`default = 100`  
   > `alpha_l_1` - Step Size for L1 attacks - `default = 0.05`    
-  > `alpha_l_2` - Step Size for L2 attacks - `default = 0.2`   
+  > `alpha_l_2` - Step Size for L2 attacks - `default = 0.1`   
   > `alpha_l_inf`- Step Size for Linf attacks - `default = 0.01`    
   > `num_iter`  - PGD iterations - `default = 100`   
   > `epochs`  - Number of Epochs - `default = 15`  
