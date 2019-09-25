@@ -218,6 +218,7 @@ def fast_adversarial_DDN(model_name):
     model = net().to(device)
     model.load_state_dict(torch.load(model_name+".pt", map_location = device))
     model.eval()
+    restarts = 1
     
     for i,batch in enumerate(test_batches): 
         x,y = batch[0].to(device), batch[1].to(device)
@@ -230,7 +231,7 @@ def fast_adversarial_DDN(model_name):
             adv = attacker.attack(model, x, labels=y, targeted=False)
         delta = (adv - x)
         norm = norms(delta).squeeze(1).squeeze(1).squeeze(1).cpu().numpy() 
-        min_norm[i] = norm
+        min_norm[0] = norm
         min_norm = min_norm.min(axis = 0)
         np.save(model_name + "/" + "DDN" + ".npy" ,min_norm) 
         break
@@ -291,7 +292,7 @@ if path is not None:
 import os
 if(not os.path.exists(model_name)):
     os.makedirs(model_name)
-    
+
 if attack == 0:
     test_foolbox(model_name, 1000)
 elif attack == 1:

@@ -83,7 +83,7 @@ elif folder == "MSD_V0":
     lr_schedule = lambda t: np.interp([t], [0, 3, 7, 15], [0.0, 0.05, 0.1, 0.001])[0]
     k_map = 1
 else:
-    lr_schedule = lambda t: np.interp([t], [0, 7, 15, epochs], [0.0, 0.1, 0.001,0])[0]
+    lr_schedule = lambda t: np.interp([t], [0, 7, 15, epochs], [0.0, 0.1, 0.001,0.0001])[0]
     k_map = 0
 
 # lr_schedule = lambda t: np.interp([t], [0, 3, 7, 15], [0, 0.05, 0.001, 0.0001])[0]
@@ -103,11 +103,6 @@ for t in range(1,epochs+1):
                                                         opt = opt, device = device, k_map = k_map, 
                                                         alpha_l_inf = alpha_l_inf, alpha_l_2 = alpha_l_2, alpha_l_1 = alpha_l_1, 
                                                         num_iter = num_iter)
-    elif choice in [7]:
-        train_loss, train_acc = epoch_adversarial(train_loader, lr_schedule, model, epoch_i = t, attack = attack, 
-                                                        opt = opt, device = device, k_map = k_map, 
-                                                        alpha_l_inf = alpha_l_inf, alpha_l_2 = alpha_l_2, alpha_l_1 = alpha_l_1, 
-                                                        num_iter = num_iter, stats = True)
     elif choice == 1:
         train_loss, train_acc = epoch_adversarial(train_loader, lr_schedule, model, epoch_i = t, attack = attack, opt = opt, device = device, k_map = k_map)
     else:

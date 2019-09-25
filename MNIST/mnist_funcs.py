@@ -98,9 +98,8 @@ def msd_v0(model, X,y, epsilon_l_inf = 0.3, epsilon_l_2= 1.5, epsilon_l_1 = 12,
                     k = random.randint(5,20)
                     alpha_l_1   = (alpha_l_1_default/k)*20
                 elif k_map == 1:
-                    k = random.randint(5,20)
+                    k = random.randint(5,40)
                     alpha_l_1   = (alpha_l_1_default/k)*20
-                    alpha_l_1   /= 2
                 else:
                     k = 10
                     alpha_l_1 = alpha_l_1_default
