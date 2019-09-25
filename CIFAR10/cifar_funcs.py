@@ -77,7 +77,7 @@ def pgd_l2(model, X, y, epsilon=0.5, alpha=0.05, num_iter = 50, device = "cuda:0
     return max_delta    
 
 
-def pgd_l1_topk(model, X,y, epsilon = 12, alpha = 0.05, num_iter = 40, k = 20, device = "cuda:1", restarts = 1, version = 0):
+def pgd_l1_topk(model, X,y, epsilon = 12, alpha = 0.05, num_iter = 50, k = 20, device = "cuda:1", restarts = 1, version = 0):
     #Gap : Dont attack pixels closer than the gap value to 0 or 1
     gap = alpha
     max_delta = torch.zeros_like(X)
@@ -246,7 +246,7 @@ def msd_v0(model, X,y, epsilon_l_inf = 0.03, epsilon_l_2= 0.5, epsilon_l_1 = 12,
 
 
 def pgd_worst_dir(model, X,y, epsilon_l_inf = 0.03, epsilon_l_2= 0.5, epsilon_l_1 = 12, 
-    alpha_l_inf = 0.003, alpha_l_2 = 0.05, alpha_l_1 = 0.05, num_iter = 40, device = "cuda:0"):
+    alpha_l_inf = 0.003, alpha_l_2 = 0.05, alpha_l_1 = 0.05, num_iter = 100, device = "cuda:0"):
     #Always call version = 0
     delta_1 = pgd_l1_topk(model, X, y, epsilon = epsilon_l_1, alpha = alpha_l_1,  device = device)
     delta_2 = pgd_l2(model, X, y, epsilon = epsilon_l_2, alpha = alpha_l_2,  device = device)

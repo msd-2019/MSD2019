@@ -329,6 +329,11 @@ model_name = "Selected/{}".format(model_list[choice])
 if path is not None:
     model_name = path
 
+import os
+if(not os.path.exists(model_name)):
+    os.makedirs(model_name)
+    
+
 print (model_name)
 if attack == 0:
     test_foolbox(model_name, 1000)

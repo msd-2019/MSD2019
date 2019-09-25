@@ -1,2 +1,6 @@
 MNIST/data
 CIFAR10/data
+CIFAR10/models/__pycache__
+CIFAR10/utils/__pycache__
+CIFAR10/__pycache__
+MNIST/__pycache__

@@ -41,7 +41,7 @@ subset = params.subset
 
 mnist_test = datasets.MNIST("../../data", train=False, download=True, transform=transforms.ToTensor())
 device = torch.device("cuda:{}".format(device_id) if torch.cuda.is_available() else "cpu")
-
+torch.cuda.set_device(int(device_id))
 
 
 class Flatten(nn.Module):
@@ -200,12 +200,12 @@ def test_pgd(model_name, clean = False):
     lr = None
 
     clean_loss, clean_acc = epoch(test_loader, lr, model, epoch_i, device = device)
-    print('Clean Acc : {0:4f}'.format(adv_acc))
-    total_loss, total_acc_1 = epoch_adversarial(test_loader,None,  model, epoch_i, pgd_l1_topk,device = device, stop = True, restarts = res)
+    print('Clean Acc : {0:4f}'.format(clean_acc))
+    total_loss, total_acc_1 = epoch_adversarial(test_loader,None,  model, epoch_i, pgd_l1_topk,device = device, stop = True, restarts = res, num_iter =100)
     print('Test Acc 1: {0:.4f}'.format(total_acc_1))    
-    total_loss, total_acc_2 = epoch_adversarial(test_loader, None, model, epoch_i, pgd_l2, device = device, stop = True, restarts = res)
+    total_loss, total_acc_2 = epoch_adversarial(test_loader, None, model, epoch_i, pgd_l2, device = device, stop = True, restarts = res, num_iter = 200)
     print('Test Acc 2: {0:.4f}'.format(total_acc_2))    
-    total_loss, total_acc_inf = epoch_adversarial(test_loader, None, model, epoch_i, pgd_linf, device = device, stop = True, restarts = res)
+    total_loss, total_acc_inf = epoch_adversarial(test_loader, None, model, epoch_i, pgd_linf, device = device, stop = True, restarts = res, num_iter = 100)
     print('Test Acc Inf: {0:.4f}'.format(total_acc_inf))    
 
 def fast_adversarial_DDN(model_name):
@@ -237,7 +237,8 @@ def fast_adversarial_DDN(model_name):
  
 
 def test_pgd_saver(model_name):
-    #Saves the minimum epsilon value for successfully attacking each image via PGD based attack as an npy file in the folder corresponding to model_name
+    #Saves the minimum epsilon value for successfully attacking each image via PGD based attack as an npy file 
+    #in the folder corresponding to model_name
     eps_1 = [3,6,(10),12,20,30,50,60,70,80,90,100]
     eps_2 = [0.1,0.2,0.3,0.5,1.0,1.5,2.0,2.5,3,5,7,10]
     eps_3 = [0.05,0.1,0.15,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1]
@@ -279,14 +280,18 @@ def test_pgd_saver(model_name):
     attacks_linf = torch.min(attacks_linf,dim = 1)[0]
     np.save(model_name + "/" + "CPGDLINF" + ".npy" ,attacks_linf.numpy())
 
+
 model_list = ["LINF", "L1", "L2", "MSD_V0", "TRIPLE", "WORST", "VANILLA"]
-
-
 model_name = "Selected/{}".format(model_list[choice])
 
 if path is not None:
+    #Override location
     model_name = path
 
+import os
+if(not os.path.exists(model_name)):
+    os.makedirs(model_name)
+    
 if attack == 0:
     test_foolbox(model_name, 1000)
 elif attack == 1:

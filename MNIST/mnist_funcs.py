@@ -12,19 +12,6 @@ import ipdb
 import random
 
 
-'''
-#DEFAULTS
-pgd_linf: epsilon=0.3, alpha=0.01, num_iter = 100
-pgd_l0  : epsilon = 12, alpha = 1
-pgd_l1_topk  : epsilon = 12, alpha = 0.02, num_iter = 100, k = rand(5,20) --> (alpha = alpha/k *20)
-pgd_l2  : epsilon = 1.5, alpha=0.1, num_iter = 100
-
-
-Original
-def msd_v0(model, X,y, epsilon_l_inf = 0.3, epsilon_l_2= 1.5, epsilon_l_1 = 12, 
-                        alpha_l_inf = 0.01, alpha_l_2 = 0.2, alpha_l_1 = 0.05, 
-                        num_iter = 100, device = "cuda:1")
-'''
 
 def fgsm(model, X, y, epsilon=0.1):
     """ Construct FGSM adversarial examples on the examples X"""
@@ -50,7 +37,7 @@ def norms_linf(Z):
 
 
 def pgd_worst_dir(model, X,y, epsilon_l_inf = 0.3, epsilon_l_2= 1.5, epsilon_l_1 = 12, 
-                                alpha_l_inf = 0.01, alpha_l_2 = 0.1, alpha_l_1 = 0.02, num_iter = 100, device = "cuda:1", k_map = 0):
+                                alpha_l_inf = 0.01, alpha_l_2 = 0.1, alpha_l_1 = 0.05, num_iter = 100, device = "cuda:1", k_map = 0):
     delta_1 = pgd_l1_topk(model, X, y, epsilon = epsilon_l_1, alpha = alpha_l_1, num_iter = 100, device = device, k_map = k_map)
     delta_2 = pgd_l2(model, X, y, epsilon = epsilon_l_2, alpha = alpha_l_2, num_iter = 100, device = device)
     delta_inf = pgd_linf(model, X, y, epsilon = epsilon_l_inf, alpha = alpha_l_inf, num_iter = 50, device = device, restarts = 2)
@@ -79,8 +66,8 @@ def pgd_worst_dir(model, X,y, epsilon_l_inf = 0.3, epsilon_l_2= 1.5, epsilon_l_1
 
 
 def msd_v0(model, X,y, epsilon_l_inf = 0.3, epsilon_l_2= 1.5, epsilon_l_1 = 12, 
-                        alpha_l_inf = 0.01, alpha_l_2 = 0.07, alpha_l_1 = 0.03, 
-                        num_iter = 50, device = "cuda:1", k_map = 0):
+                        alpha_l_inf = 0.01, alpha_l_2 = 0.2, alpha_l_1 = 0.05, 
+                        num_iter = 100, device = "cuda:1", k_map = 0):
     alpha_l_1_default = alpha_l_1
     max_max_delta = torch.zeros_like(X)
     max_max_loss = torch.zeros(y.shape[0]).to(y.device)
@@ -111,17 +98,12 @@ def msd_v0(model, X,y, epsilon_l_inf = 0.3, epsilon_l_2= 1.5, epsilon_l_1 = 12,
                     k = random.randint(5,20)
                     alpha_l_1   = (alpha_l_1_default/k)*20
                 elif k_map == 1:
-                    k = random.randint(10,40)
-                    alpha_l_1   = (alpha_l_1_default/k)*40
-                elif k_map ==2 :
-                    k = 5
-                    alpha_l_1 = alpha_l_1_default
-                elif k_map ==3 :
-                    k = 1
-                    alpha_l_1 = alpha_l_1_default
-                else:
-                    k = random.randint(5,40)
+                    k = random.randint(5,20)
                     alpha_l_1   = (alpha_l_1_default/k)*20
+                    alpha_l_1   /= 2
+                else:
+                    k = 10
+                    alpha_l_1 = alpha_l_1_default
 
                 delta_l_1   = delta.data + alpha_l_1*l1_dir_topk(delta.grad, delta.data, X, alpha_l_1, k=k)
                 delta_l_1   = proj_l1ball(delta_l_1, epsilon_l_1, device)
@@ -262,7 +244,7 @@ def pgd_l0(model, X,y, epsilon = 12, alpha = 0.5, num_iter = 100, device = "cuda
 
 
 def pgd_l1_topk(model, X,y, epsilon = 12, alpha = 0.05, num_iter = 50, k_map = 0, device = "cuda:1", restarts = 1):
-        #Gap : Dont attack pixels closer than the gap value to 0 or 1
+    #Gap : Dont attack pixels closer than the gap value to 0 or 1
     gap = alpha
     max_delta = torch.zeros_like(X)
     delta = torch.zeros_like(X, requires_grad = True)
