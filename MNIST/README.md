@@ -56,20 +56,6 @@ The testing code is automatically designed to pick the models from the folder.
 **3. MSD:**   
 `python train.py -model 3 -epochs 15 -lr_choice 3 -k_map 1 -alpha_l1 0.05 -alpha_l_2 0.2`
 
-	opt = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
-	lr_schedule = lambda t: np.interp([t], [0, 3, 7, 15], [0, 0.05, 0.001, 0.0001])[0]
-	criterion = nn.CrossEntropyLoss()
-	epochs = 15
-	epoch_adversarial(train_loader, lr_schedule, model, epoch_i = t, attack = pgd_all, opt = opt, device = device, epsilon_l_inf = 0.3, epsilon_l_1 = 12, epsilon_l_2 = 1.5)
-	In pgd_all, epsilon_l_inf = 0.3, 
-            	epsilon_l_2= 1.5, 
-            	epsilon_l_1 = 12, 
-                alpha_l_inf = 0.01,
-                k = random.randint(5,20)
-            	alpha_l_1 = 0.05/k*20
-            	alpha_l_2 = 0.2, 
-		        num_iter = 100
-
 **4. Worst Augmentation:**  
 `python train.py -model 4 -lr_choice 1 -epochs 20 -k_map 0 -alpha_l1 0.02`  
 	Restarts for l1 = 2
