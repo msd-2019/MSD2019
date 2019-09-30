@@ -54,12 +54,12 @@ The testing code is automatically designed to pick the models from the folder.
 `python train.py -model 2`
 	
 **3. MSD:**   
-`python train.py -model 3 -epochs 15 -lr_choice 3 -k_map 1 -alpha_l1 0.05 -alpha_l_2 0.2`
+`python train.py -model 3 -epochs 15 -alpha_l_2 0.2`
 
 **4. Worst Augmentation:**  
-`python train.py -model 4 -lr_choice 1 -epochs 20 -k_map 0 -alpha_l1 0.02`  
+`python train.py -model 4 -epochs 20 -alpha_l_1 0.02`  
 	Restarts for l1 = 2
 	
 **5. Triple Augmentation:**  
-`python train.py -model 5- lr_choice 2 -k_map 0 -epochs 20`
+`python train.py -model 5 -epochs 20`
 
